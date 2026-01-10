@@ -1,0 +1,88 @@
+/* src/app/login/login.module.css */
+.wrapper {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0a0a0a; /* 기본 배경색 (검은색 계열) */
+}
+
+.bgContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #111; /* 이미지가 안 나올 때를 대비한 짙은 회색 */
+  z-index: 1;
+}
+
+.card {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 380px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.titleBox {
+  padding: 50px 0 30px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.titleBox h1 {
+  font-size: 28px;
+  color: #fff;
+  letter-spacing: 4px;
+}
+
+.buttonBox {
+  padding: 30px;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.loginBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}
+
+.btnGoogle { background: #fff; color: #000; }
+.btnKakao { background: #FEE500; color: #3c1e1e; }
+.btnNaver { background: #03C75A; color: #fff; }
+
+.icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footerLink {
+  color: #888;
+  font-size: 13px;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
