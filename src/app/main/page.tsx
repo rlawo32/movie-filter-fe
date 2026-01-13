@@ -6,7 +6,9 @@ const Main = () => {
 
     return (
         <Style.Main>
-            <h1>MAIN PAGE</h1>
+            <div className="main_start">
+                <button>시작하기</button>
+            </div>
         </Style.Main>
     )
 }
