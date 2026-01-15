@@ -11,6 +11,7 @@ const FooterStyle = styled('div')`
     height: 50px;
     background-color: #0F0F0F;
     color: white;
+    z-index: 1000;
 `
 
 const Footer = () => {
