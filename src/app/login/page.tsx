@@ -5,19 +5,25 @@ import styles from './login.module.css';
 
 export default function LoginPage() {
   const handleLogin = (provider: string) => {
+    // 백엔드 서버 주소
+    const BACKEND_URL = 'http://localhost:8080';
+
     if (provider === 'google') {
-      window.location.href = 'http://localhost:8080/oauth2/authorization/google';
-    } else {
+      window.location.href = `${BACKEND_URL}/oauth2/authorization/google`;
+    } 
+    else if (provider === 'kakao') {
+      // 이제 알럿창 대신 백엔드 카카오 로그인 엔드포인트로 리다이렉트합니다.
+      window.location.href = `${BACKEND_URL}/oauth2/authorization/kakao`;
+    } 
+    else {
       alert(`${provider} 로그인은 준비 중입니다.`);
     }
   };
 
   return (
     <div className={styles.wrapper}>
-      {/* 배경: 이미지가 없어도 어두운 회색 바둑판이라도 보이게 설정 */}
       <div className={styles.bgContainer}></div>
       
-      {/* 로그인 카드 */}
       <div className={styles.card}>
         <div className={styles.titleBox}>
           <h1>시작하기</h1>
@@ -30,7 +36,7 @@ export default function LoginPage() {
             Google로 시작하기
           </button>
 
-          {/* 카카오 버튼 (SVG로 깨짐 방지) */}
+          {/* 카카오 버튼 (이제 작동합니다!) */}
           <button onClick={() => handleLogin('kakao')} className={`${styles.loginBtn} ${styles.btnKakao}`}>
             <div className={styles.icon}>
               <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
@@ -49,7 +55,7 @@ export default function LoginPage() {
           </button>
 
           <div style={{ textAlign: 'center', marginTop: '20px' }}>
-            <button className={styles.footerLink}>다른 방법으로 도입기</button>
+            <button className={styles.footerLink}>다른 방법으로 로그인하기</button>
           </div>
         </div>
       </div>
