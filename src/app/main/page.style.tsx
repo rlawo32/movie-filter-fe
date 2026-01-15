@@ -30,7 +30,7 @@ export const Main = styled('div')`
         width: 100%;
         height: 100%;
 
-        button {
+        .main_button {
             position: absolute;
             top: 42%;
             padding: 24px 48px;
