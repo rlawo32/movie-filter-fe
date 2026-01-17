@@ -10,12 +10,11 @@ export default function LoginPage() {
 
     if (provider === 'google') {
       window.location.href = `${BACKEND_URL}/oauth2/authorization/google`;
-    } 
-    else if (provider === 'kakao') {
-      // 이제 알럿창 대신 백엔드 카카오 로그인 엔드포인트로 리다이렉트합니다.
+    }else if (provider === 'kakao') {
       window.location.href = `${BACKEND_URL}/oauth2/authorization/kakao`;
-    } 
-    else {
+    }else if (provider === 'naver') {
+      window.location.href = `http://localhost:8080/oauth2/authorization/naver`;
+    }else {
       alert(`${provider} 로그인은 준비 중입니다.`);
     }
   };
@@ -36,7 +35,7 @@ export default function LoginPage() {
             Google로 시작하기
           </button>
 
-          {/* 카카오 버튼 (이제 작동합니다!) */}
+          {/* 카카오 버튼 */}
           <button onClick={() => handleLogin('kakao')} className={`${styles.loginBtn} ${styles.btnKakao}`}>
             <div className={styles.icon}>
               <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
