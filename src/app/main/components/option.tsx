@@ -4,89 +4,156 @@ import * as Style from "./option.style";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    faSmile as smile
+    faChild as personnel_solo,
+    faUserGroup as personnel_freind,
+    faChildren as personnel_couple,
+    faUsers as personnel_family,
+    faCheck as check,
 } from "@fortawesome/free-solid-svg-icons";
+import {
+    faMeh as motion_normal,
+    faLaugh as motion_happy, 
+    faSadTear as motion_sad, 
+    faAngry as motion_angry,
+    faGrimace as motion_petulance,
+    faLaughSquint as motion_excited,
+    faDizzy as motion_unrest,
+    faFrown as motion_helpless,
+    faTired as motion_tired,
+} from "@fortawesome/free-regular-svg-icons";
 
 import { useEffect, useState } from "react";
 import useMainProcessStore from "../../stores/useMainProcessStore";
 
 import useSupabaseBrowser from "@/app/supabase/supabase-browser";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
-import { 
-    getOptionAllQuery, getOptionPersonnelQuery, getOptionMotionQuery, getOptionGenreQuery 
-} from "@/app/queries/getOptionQuery";
+import { getOptionAllQuery } from "@/app/queries/getOptionQuery";
+import axios from "axios";
 
 const Option = () => {
     const supabase = useSupabaseBrowser();
 
-    const {process, setProcess} = useMainProcessStore();
+    const {process, setProcess, optionArr, setOptionArr, optionClean} = useMainProcessStore();
 
     const { data: optionAll } = useQuery(getOptionAllQuery(supabase), {staleTime: Infinity, gcTime: 1000 * 60 * 60});
-    const { data: optionPersonnel } = useQuery(getOptionPersonnelQuery(supabase), {enabled:process===1});
-    const { data: optionMotion } = useQuery(getOptionMotionQuery(supabase), {enabled:process===2});
-    const { data: optionGenre } = useQuery(getOptionGenreQuery(supabase), {enabled:process===3});
     const [optionData, setOptionData] = useState<{option_title:string}[]>([]);
 
+    const recommendMovieActive = () => {
+        axios({
+            method: "POST",
+            url: "/local/api/test",
+            data: JSON.stringify(optionArr),
+            headers: {'Content-type': 'application/json'}
+        }).then((res):void => {
+            console.log(res.data);
+        }).catch((err):void => {
+            alert("서버를 확인해주세요.");
+            console.log(err.message);
+        })
+    }
+
+    const closeModal = () => {
+        setProcess(0);
+        optionClean();
+    }
+
     useEffect(() => {
-        if(process > 1) setOptionData([]);
+        if(process > 0) setOptionData([]);
         setTimeout(() => {
             if(!!optionAll) {
                 if(process === 1) {
                     setOptionData(optionAll.filter((item) => item.option_type === 'P'));
-                    console.log("Personnel");
                 } else if(process === 2) {
                     setOptionData(optionAll.filter((item) => item.option_type === 'M'));
-                    console.log("Motion");
                 } else if(process === 3) {
                     setOptionData(optionAll.filter((item) => item.option_type === 'G'));
-                    console.log("Genre");
                 }
             }
         }, 100)
     }, [process, optionAll])
 
     return (
-        <Style.OverlayStyle> 
+        <Style.OverlayStyle $process={process}> 
             <Style.OptionStyle $process={process}>
+                <button className="modal_close" onClick={() => closeModal()}>X</button>
+                <div className="option_progress">
+                    <Style.ProgressItem $process={process === 1 ? true : false}>
+                        <div className="item_icon">
+                            {process > 1 ? <FontAwesomeIcon icon={check} className="progress_icon" /> : <></>}
+                        </div>
+                        <div className="item_title">
+                            인원
+                        </div>
+                    </Style.ProgressItem>
+                    <Style.ProgressBar>
+                        <Style.ProgressGauge $process={process > 1 ? true : false} />
+                    </Style.ProgressBar>
+                    <Style.ProgressItem $process={process === 2 ? true : false}>
+                        <div className="item_icon">
+                            {process > 2 ? <FontAwesomeIcon icon={check} className="progress_icon" /> : <></>}
+                        </div>
+                        <div className="item_title">
+                            감정
+                        </div>
+                    </Style.ProgressItem>
+                    <Style.ProgressBar>
+                        <Style.ProgressGauge $process={process > 2 ? true : false} />
+                    </Style.ProgressBar>
+                    <Style.ProgressItem $process={process === 3 ? true : false}>
+                        <div className="item_icon">
+                            {process > 3 ? <FontAwesomeIcon icon={check} className="progress_icon" /> : <></>}
+                        </div>
+                        <div className="item_title">
+                            장르
+                        </div>
+                    </Style.ProgressItem>
+                </div>
                 <div className="option_view">
                     {
                         optionData.map((item:any, idx) => {
                             return (
-                                <div className="option_item" key={idx}>
+                                <Style.OptionItem key={idx} $process={process} $select={optionArr.some(option => option.id === item.option_id)}
+                                                  onClick={() => setOptionArr(item.option_id, item.option_type, item.option_title)} >
                                     {
-                                        item.option_id === 'option_1' ? <FontAwesomeIcon icon={smile} className="option_icon" /> :
-                                        item.option_id === 'option_2' ? <FontAwesomeIcon icon={smile} className="option_icon" /> :
-                                        item.option_id === 'option_3' ? <FontAwesomeIcon icon={smile} className="option_icon" /> :
-                                        item.option_id === 'option_4' ? <FontAwesomeIcon icon={smile} className="option_icon" /> :
-                                        item.option_id === 'option_5' ? <FontAwesomeIcon icon={smile} className="option_icon" /> :
-                                        item.option_id === 'option_6' ? <FontAwesomeIcon icon={smile} className="option_icon" /> :
-                                        item.option_id === 'option_7' ? <FontAwesomeIcon icon={smile} className="option_icon" /> :
-                                        item.option_id === 'option_8' ? <FontAwesomeIcon icon={smile} className="option_icon" /> :
-                                        item.option_id === 'option_9' ? <FontAwesomeIcon icon={smile} className="option_icon" /> :
-                                        item.option_id === 'option_10' ? <FontAwesomeIcon icon={smile} className="option_icon" /> :
-                                        item.option_id === 'option_11' ? <FontAwesomeIcon icon={smile} className="option_icon" /> :
-                                        item.option_id === 'option_12' ? <FontAwesomeIcon icon={smile} className="option_icon" /> :
-                                        item.option_id === 'option_13' ? <FontAwesomeIcon icon={smile} className="option_icon" /> :
-                                        item.option_id === 'option_14' ? <FontAwesomeIcon icon={smile} className="option_icon" /> : 
-                                        item.option_id === 'option_15' ? <FontAwesomeIcon icon={smile} className="option_icon" /> : 
-                                        item.option_id === 'option_16' ? <FontAwesomeIcon icon={smile} className="option_icon" /> :
-                                        item.option_id === 'option_17' ? <FontAwesomeIcon icon={smile} className="option_icon" /> :
-                                        item.option_id === 'option_18' ? <FontAwesomeIcon icon={smile} className="option_icon" /> :
-                                        item.option_id === 'option_19' ? <FontAwesomeIcon icon={smile} className="option_icon" /> :
-                                        item.option_id === 'option_20' ? <FontAwesomeIcon icon={smile} className="option_icon" /> :
-                                        item.option_id === 'option_21' ? <FontAwesomeIcon icon={smile} className="option_icon" /> :
-                                        item.option_id === 'option_22' ? <FontAwesomeIcon icon={smile} className="option_icon" /> : <></>
+                                        item.option_id === 'option_1' ? <FontAwesomeIcon icon={personnel_solo} className="option_icon" /> :
+                                        item.option_id === 'option_2' ? <FontAwesomeIcon icon={personnel_freind} className="option_icon" /> :
+                                        item.option_id === 'option_3' ? <FontAwesomeIcon icon={personnel_couple} className="option_icon" /> :
+                                        item.option_id === 'option_4' ? <FontAwesomeIcon icon={personnel_family} className="option_icon" /> :
+                                        item.option_id === 'option_5' ? <FontAwesomeIcon icon={motion_normal} className="option_icon" /> :
+                                        item.option_id === 'option_6' ? <FontAwesomeIcon icon={motion_happy} className="option_icon" /> :
+                                        item.option_id === 'option_7' ? <FontAwesomeIcon icon={motion_sad} className="option_icon" /> :
+                                        item.option_id === 'option_8' ? <FontAwesomeIcon icon={motion_angry} className="option_icon" /> :
+                                        item.option_id === 'option_9' ? <FontAwesomeIcon icon={motion_petulance} className="option_icon" /> :
+                                        item.option_id === 'option_10' ? <FontAwesomeIcon icon={motion_excited} className="option_icon" /> :
+                                        item.option_id === 'option_11' ? <FontAwesomeIcon icon={motion_unrest} className="option_icon" /> :
+                                        item.option_id === 'option_12' ? <FontAwesomeIcon icon={motion_helpless} className="option_icon" /> :
+                                        item.option_id === 'option_13' ? <FontAwesomeIcon icon={motion_tired} className="option_icon" /> : <></>
                                     }
-                                    {item.option_title}
-                                </div>
+                                    <div className="option_title">{item.option_title}</div>
+                                </Style.OptionItem>
                             )  
                         })
                     }
                 </div>
                 <div className="option_next">
-                    <button onClick={() => setProcess(process+1)}>
-                        {process === 3 ? "완료" : "다음"}
-                    </button>
+                    {
+                        process > 1 ?
+                            <button onClick={() => setProcess(process-1)}>
+                                뒤로
+                            </button>
+                            :
+                            <></>
+                    }
+                    {
+                        process > 2 ? 
+                            <button onClick={() => recommendMovieActive()}>
+                                완료
+                            </button>
+                            : 
+                            <button onClick={() => setProcess(process+1)}>
+                                다음
+                            </button>
+                    }
                 </div>
             </Style.OptionStyle>
         </Style.OverlayStyle>
