@@ -3,13 +3,9 @@ import { create } from "zustand";
 interface mainProcessStore {
     process:number;
     setProcess: (process: number) => void;
-    personnel: number;
-    setPersonnel: (personnel: number) => void;
-    motion: number;
-    setMotion: (motion: number) => void;
-    genre: number;
-    setGenre: (genre: number) => void;
-    clean: () => void;
+    optionArr: {id:string; type:string; title:string}[];
+    setOptionArr: (id:string, type:string, title:string) => void;
+    optionClean: () => void;
 }
 
 const useMainProcessStore = create<mainProcessStore>((set, get) => ({
@@ -18,26 +14,14 @@ const useMainProcessStore = create<mainProcessStore>((set, get) => ({
         set((state: {process: number}) => ({
             process: (state.process = process),
         })),
-    personnel: 0,
-    setPersonnel: (personnel: number) =>
-        set((state: {personnel: number}) => ({
-            personnel: (state.personnel = personnel),
+    optionArr: [],
+    setOptionArr: (id:string, type:string, title:string) =>
+        set((state) => ({
+            optionArr: [...state.optionArr, {id, type, title}],
         })),
-    motion: 0,
-    setMotion: (motion: number) =>
-        set((state: {motion: number}) => ({
-            motion: (state.motion = motion),
-        })),
-    genre: 0,
-    setGenre: (genre: number) =>
-        set((state: {genre: number}) => ({
-            genre: (state.genre = genre),
-        })),
-    clean: () => {
+    optionClean: () => {
         set({process: 0});
-        set({personnel: 0});
-        set({motion: 0});
-        set({genre: 0});
+        set({optionArr: []});
     },
 }));
 
