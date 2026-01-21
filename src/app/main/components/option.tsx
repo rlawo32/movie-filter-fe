@@ -33,7 +33,7 @@ import axios from "axios";
 const Option = () => {
     const supabase = useSupabaseBrowser();
 
-    const {process, setProcess, optionArr, setOptionArr, optionClean} = useMainProcessStore();
+    const {process, setProcess, optionArr, setOptionArr, removeOptionArr, selectPersonnel, optionClean} = useMainProcessStore();
 
     const { data: optionAll } = useQuery(getOptionAllQuery(supabase), {staleTime: Infinity, gcTime: 1000 * 60 * 60});
     const [optionData, setOptionData] = useState<{option_title:string}[]>([]);
@@ -55,6 +55,34 @@ const Option = () => {
     const closeModal = () => {
         setProcess(0);
         optionClean();
+    }
+
+    const selectOptionItem = (optionId:string, optionType:string, optionTitle:string) => {
+        if(optionArr.some(item => item.id === optionId)) {
+            removeOptionArr(optionId);
+        } else {
+            if(process === 1) {
+                selectPersonnel(optionId, optionType, optionTitle);
+            } else {
+                setOptionArr(optionId, optionType, optionTitle);
+            } 
+        }
+    }
+
+    const selectNextOption = () => {
+        if(process === 1) {
+            if(!optionArr.some(item => item.type === 'P')) {
+                alert('최소 1개 선택해주세요.');
+            } else {
+                setProcess(process+1);
+            }
+        } else if(process === 2) {
+            if(!optionArr.some(item => item.type === 'M')) {
+                alert('최소 1개 선택해주세요.');
+            } else {
+                setProcess(process+1);
+            }
+        } 
     }
 
     useEffect(() => {
@@ -113,7 +141,7 @@ const Option = () => {
                         optionData.map((item:any, idx) => {
                             return (
                                 <Style.OptionItem key={idx} $process={process} $select={optionArr.some(option => option.id === item.option_id)}
-                                                  onClick={() => setOptionArr(item.option_id, item.option_type, item.option_title)} >
+                                                  onClick={() => selectOptionItem(item.option_id, item.option_type, item.option_title)} >
                                     {
                                         item.option_id === 'option_1' ? <FontAwesomeIcon icon={personnel_solo} className="option_icon" /> :
                                         item.option_id === 'option_2' ? <FontAwesomeIcon icon={personnel_freind} className="option_icon" /> :
@@ -150,7 +178,7 @@ const Option = () => {
                                 완료
                             </button>
                             : 
-                            <button onClick={() => setProcess(process+1)}>
+                            <button onClick={() => selectNextOption()}>
                                 다음
                             </button>
                     }
