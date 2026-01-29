@@ -68,7 +68,7 @@ export default function MovieDetailPage() {
         }
         .platform-card:hover { transform: scale(1.05); background: #252525; border-color: #444; }
         
-        /* 🚨 플랫폼 로고 크기 대폭 확대 */
+        /* 플랫폼 로고 크기 대폭 확대 */
         .logo-box { 
           width: 100%; 
           height: 80px; /* 기존 35px에서 80px로 확대 */

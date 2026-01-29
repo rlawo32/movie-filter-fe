@@ -35,21 +35,7 @@ const Option = () => {
 
     const {process, setProcess, optionArr, setOptionArr, removeOptionArr, selectPersonnel, optionClean} = useMainProcessStore();
 
-    //const { data: optionAll } = useQuery(getOptionAllQuery(supabase), {staleTime: Infinity, gcTime: 1000 * 60 * 60});
-
-// ❌ 에러 유발 코드 (주석 처리)
-    // const { data: optionAll } = useQuery(getOptionAllQuery(supabase), {staleTime: Infinity, gcTime: 1000 * 60 * 60});
-
-    // ✅ 가짜 데이터 주입 (UI 테스트용)
-    const optionAll = [
-        { option_id: 'option_1', option_type: 'P', option_title: '혼자' },
-        { option_id: 'option_2', option_type: 'P', option_title: '친구' },
-        { option_id: 'option_5', option_type: 'M', option_title: '평범' },
-        { option_id: 'option_6', option_type: 'M', option_title: '즐거움' },
-        { option_id: 'option_14', option_type: 'G', option_title: '액션' }, // 장르 예시
-    ];
-
-
+    const { data: optionAll } = useQuery(getOptionAllQuery(supabase), {staleTime: Infinity, gcTime: 1000 * 60 * 60});
 
     const [optionData, setOptionData] = useState<{option_title:string}[]>([]);
 
