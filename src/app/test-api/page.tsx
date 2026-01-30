@@ -9,7 +9,7 @@ export default function MovieDetailPage() {
       color: 'white',
       minHeight: '100vh',
       width: '100vw',
-      position: 'fixed', // 화면 전체를 덮어버림 (팀원 레이아웃 무력화)
+      position: 'fixed', // 화면 전체를 덮어버림
       top: 0,
       left: 0,
       zIndex: 9999,
@@ -38,7 +38,7 @@ export default function MovieDetailPage() {
           </div>
         </div>
 
-        {/* 플랫폼 그리드 (기획안 핵심) */}
+        {/* 플랫폼 그리드 */}
         <h3 style={{ fontSize: '14px', color: '#555', marginBottom: '15px', letterSpacing: '2px' }}>WATCH NOW</h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '15px' }}>
           {['NETFLIX', 'TVING', 'WAVVE', 'DISNEY+'].map((name) => (

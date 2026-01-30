@@ -13,7 +13,7 @@ export default function LoginSuccess() {
     const token = searchParams.get('token');
 
     if (token) {
-      // 2. 브라우저 로컬 스토리지에 토큰 저장 (로그인 유지의 핵심)
+      // 2. 브라우저 로컬 스토리지에 토큰 저장
       localStorage.setItem('accessToken', token);
       
       console.log('로그인 성공! 토큰이 저장되었습니다.');
