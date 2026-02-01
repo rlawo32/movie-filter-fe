@@ -41,8 +41,8 @@ const Option = () => {
     const recommendMovieActive = () => {
         axios({
             method: "POST",
-            url: "/local/api/test",
-            data: JSON.stringify(optionArr),
+            url: "/local/test/search",
+            data: optionArr,
             headers: {'Content-type': 'application/json'}
         }).then((res):void => {
             console.log(res.data);
