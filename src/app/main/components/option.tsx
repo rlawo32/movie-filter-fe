@@ -36,6 +36,7 @@ const Option = () => {
     const {process, setProcess, optionArr, setOptionArr, removeOptionArr, selectPersonnel, optionClean} = useMainProcessStore();
 
     const { data: optionAll } = useQuery(getOptionAllQuery(supabase), {staleTime: Infinity, gcTime: 1000 * 60 * 60});
+
     const [optionData, setOptionData] = useState<{option_title:string}[]>([]);
 
     const recommendMovieActive = () => {
