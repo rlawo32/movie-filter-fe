@@ -1,164 +1,165 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
 
-// 1. 영화 데이터 (상세 정보 포함)
-const DUMMY_MOVIES = [
-  { 
-    id: 1, 
-    title: "올드 맨 (Old Man)", 
-    year: "2021", 
-    matchRate: 93, 
-    genres: ["미스터리", "스릴러"],
-    overview: "재우는 벽과 벽 사이의 오묘한 위치에 배치된 마을에서 전개되는 공포의 파티를 준비하고 있다. 하지만 그의 계획은 예상치 못한 손님의 방문으로 어긋나기 시작하는데...",
-    poster: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=500",
-    platforms: [
-      { name: "NETFLIX", logo: "/images/logos/netflix.png" },
-      { name: "TVING", logo: "/images/logos/tving.png" },
-      { name: "WAVVE", logo: "/images/logos/wavve.png" },
-      { name: "WATCHA", logo: "/images/logos/watcha.png" },
-    ]
-  },
-  { 
-    id: 2, 
-    title: "파묘", 
-    year: "2024", 
-    matchRate: 88, 
-    genres: ["미스터리", "공포"], 
-    overview: "조상의 묘를 옮기며 벌어지는 기이한 사건들... 거액의 의뢰를 받은 무당과 지관이 겪는 험한 일.", 
-    poster: "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?q=80&w=500", 
-    platforms: [{ name: "NETFLIX", logo: "/images/logos/netflix.png" }] 
-  },
-  { 
-    id: 3, 
-    title: "듄: 파트 2", 
-    year: "2024", 
-    matchRate: 95, 
-    genres: ["SF", "액션"], 
-    overview: "우주를 구원할 운명의 전쟁이 시작된다. 아라키스 행성에서의 거대한 여정.", 
-    poster: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=500", 
-    platforms: [{ name: "WAVVE", logo: "/images/logos/wavve.png" }] 
-  },
-];
+// Supabase 설정
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 export default function MovieListPage() {
-  // 팝업(모달) 상태 관리
+  const [movies, setMovies] = useState<any[]>([]);
   const [selectedMovie, setSelectedMovie] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  // 클릭 시 페이지 이동을 막고 모달만 띄우는 함수
-  const handleCardClick = (e: React.MouseEvent, movie: any) => {
-    e.preventDefault(); // 페이지 이동 방지
+  // 1. Supabase에서 실제 데이터 가져오기
+  useEffect(() => {
+    async function fetchMovies() {
+      const { data, error } = await supabase
+        .from('mf_movies_info')
+        .select('*')
+        .order('mi_popularity', { ascending: false }) // 인기도 순 정렬
+        .limit(20);
+
+      if (!error && data) {
+        setMovies(data);
+      }
+      setLoading(false);
+    }
+    fetchMovies();
+  }, []);
+
+  const handleCardClick = (movie: any) => {
     setSelectedMovie(movie);
   };
+
+  if (loading) return <div className="bg-[#141414] min-h-screen flex items-center justify-center text-white">로딩 중...</div>;
 
   return (
     <div id="movie-list-root">
       <style dangerouslySetInnerHTML={{ __html: `
         #movie-list-root {
-          all: initial; display: block; background-color: #141414; min-height: 100vh;
+          background-color: #141414; min-height: 100vh;
           font-family: 'Pretendard', sans-serif; color: white; padding: 60px 40px;
         }
-        #movie-list-root * { box-sizing: border-box; color: white; }
-        
-        .list-container { max-width: 1200px; margin: 0 auto; }
-        .header-title { font-size: 32px; font-weight: 900; margin-bottom: 40px; }
+        .list-container { max-width: 1400px; margin: 0 auto; }
+        .header-title { font-size: 32px; font-weight: 900; margin-bottom: 40px; color: #fff; }
 
-        .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 30px; }
+        /* 그리드 디자인 */
+        .movie-grid { 
+          display: grid; 
+          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+          gap: 25px; 
+        }
         
-        /* 영화 카드: a 태그 대신 div로 구성 */
-        .movie-card { cursor: pointer; transition: transform 0.3s ease; display: block; }
-        .movie-card:hover { transform: translateY(-10px); }
-        .poster-wrapper { width: 100%; aspect-ratio: 2/3; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid #333; }
+        /* 영화 카드 */
+        .movie-card { cursor: pointer; transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); }
+        .movie-card:hover { transform: scale(1.05); z-index: 10; }
+        
+        .poster-wrapper { 
+          width: 100%; aspect-ratio: 2/3; border-radius: 8px; overflow: hidden; 
+          position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
         .poster-img { width: 100%; height: 100%; object-fit: cover; }
-        .match-badge { position: absolute; top: 10px; right: 10px; background: #ff0558; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: bold; }
+        .match-badge { 
+          position: absolute; top: 10px; left: 10px; background: #e50914; 
+          padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; 
+        }
 
-        /* 모달 스타일 */
+        /* 모달 디자인 (상세보기) */
         .modal-overlay {
           position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-          background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center;
-          z-index: 9999; padding: 20px;
+          background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center;
+          z-index: 9999; backdrop-filter: blur(5px);
         }
         .modal-content {
-          background: #141414; width: 100%; max-width: 900px; max-height: 85vh;
-          overflow-y: auto; border-radius: 24px; position: relative; border: 1px solid #333;
-          animation: modal-up 0.3s ease-out;
+          background: #181818; width: 95%; max-width: 850px; max-height: 90vh;
+          overflow-y: auto; border-radius: 15px; position: relative;
+          box-shadow: 0 0 50px rgba(0,0,0,1); animation: modal-up 0.4s ease;
         }
-        @keyframes modal-up {
-          from { transform: translateY(30px); opacity: 0; }
-          to { transform: translateY(0); opacity: 1; }
-        }
-        .close-btn {
-          position: absolute; top: 20px; right: 25px; font-size: 35px; 
-          cursor: pointer; z-index: 10001; color: #fff;
-        }
-
-        .detail-layout { padding: 40px; }
-        .top-section { display: flex; gap: 30px; }
-        .detail-poster { width: 200px; height: 300px; border-radius: 15px; object-fit: cover; flex-shrink: 0; }
-        .title { font-size: 40px; font-weight: 900; margin: 0 0 10px 0; letter-spacing: -2px; }
-        .meta { color: #888 !important; margin-bottom: 20px; font-size: 16px; }
-        .synopsis-box { background: #1f1f1f; padding: 20px; border-radius: 15px; border: 1px solid #333; margin-bottom: 20px; }
-        .synopsis-text { font-size: 14px; color: #ccc !important; line-height: 1.7; }
+        @keyframes modal-up { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
         
-        .platform-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 20px; }
-        .platform-card { background: #1c1c1c; padding: 15px; border-radius: 15px; display: flex; flex-direction: column; align-items: center; border: 1px solid #2a2a2a; }
-        .logo-box { height: 30px; display: flex; align-items: center; margin-bottom: 8px; }
-        .logo-box img { max-height: 20px !important; width: auto !important; }
-
-        @media (max-width: 800px) {
-          .top-section { flex-direction: column; align-items: center; }
-          .platform-grid { grid-template-columns: repeat(2, 1fr); }
+        .close-btn {
+          position: absolute; top: 20px; right: 20px; width: 40px; height: 40px;
+          background: #181818; border-radius: 50%; display: flex; align-items: center; 
+          justify-content: center; font-size: 24px; cursor: pointer; z-index: 10;
         }
+
+        /* 모달 내부 상세 레이아웃 */
+        .hero-banner { width: 100%; height: 400px; position: relative; }
+        .hero-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
+        .hero-gradient { 
+          position: absolute; inset: 0; 
+          background: linear-gradient(to top, #181818 5%, transparent 50%); 
+        }
+        
+        .detail-info { padding: 0 40px 40px 40px; margin-top: -60px; position: relative; }
+        .main-title { font-size: 48px; font-weight: 900; margin-bottom: 15px; text-shadow: 2px 2px 10px rgba(0,0,0,0.8); }
+        .meta-row { display: flex; gap: 15px; color: #a3a3a3; font-size: 16px; margin-bottom: 20px; align-items: center;}
+        .rating-text { color: #46d369; font-weight: bold; }
+        
+        .summary { font-size: 16px; line-height: 1.6; color: #d2d2d2; max-width: 600px; }
+
+        /* OTT 로고 섹션 */
+        .ott-title { font-size: 14px; color: #808080; margin-bottom: 15px; display: block; letter-spacing: 1px; }
+        .ott-grid { display: flex; gap: 20px; }
+        .ott-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .ott-logo { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; }
       ` }} />
 
       <div className="list-container">
-        <h1 className="header-title">오늘의 추천 영화</h1>
+        <h1 className="header-title">명성님을 위한 추천 콘텐츠</h1>{/* 실제 로그인 닉네임 뿌려주는걸로 개선 필요 */}
+        
         <div className="movie-grid">
-          {DUMMY_MOVIES.map((movie) => (
-            <div key={movie.id} className="movie-card" onClick={(e) => handleCardClick(e, movie)}>
+          {movies.map((movie) => (
+            <div key={movie.mi_id} className="movie-card" onClick={() => handleCardClick(movie)}>
               <div className="poster-wrapper">
-                <img src={movie.poster} className="poster-img" alt={movie.title} />
-                <div className="match-badge">{movie.matchRate}%</div>
+                <img src={movie.mi_poster_path} className="poster-img" alt={movie.mi_title} />
+                <div className="match-badge">{Math.floor(movie.mi_popularity % 100)}% 일치</div>
               </div>
-              <h3 style={{marginTop: '15px', fontSize: '18px', fontWeight: '700'}}>{movie.title}</h3>
-              <p style={{fontSize: '14px', color: '#666'}}>{movie.year}</p>
+              <h3 style={{marginTop: '12px', fontSize: '15px', fontWeight: '600'}}>{movie.mi_title}</h3>
+              <p style={{fontSize: '13px', color: '#808080'}}>{movie.mi_release_date?.split('-')[0]}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* 팝업 레이어 */}
+      {/* 영화 상세 모달 */}
       {selectedMovie && (
         <div className="modal-overlay" onClick={() => setSelectedMovie(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <span className="close-btn" onClick={() => setSelectedMovie(null)}>&times;</span>
+            <div className="close-btn" onClick={() => setSelectedMovie(null)}>✕</div>
             
-            <div className="detail-layout">
-              <div className="top-section">
-                <img src={selectedMovie.poster} className="detail-poster" alt="poster" />
-                <div className="info-area">
-                  <h1 className="title">{selectedMovie.title}</h1>
-                  <p className="meta">{selectedMovie.year} ㆍ {selectedMovie.genres.join(', ')}</p>
-                  <div className="synopsis-box">
-                    <p className="synopsis-text">{selectedMovie.overview}</p>
-                  </div>
-                  <div style={{fontSize: '18px', color: '#ff0558', fontWeight: 'bold'}}>
-                    취향 일치도 {selectedMovie.matchRate}%
-                  </div>
-                </div>
-              </div>
+            {/* 상단 배너 */}
+            <div className="hero-banner">
+              <img src={selectedMovie.mi_backdrop_path} className="hero-img" alt="backdrop" />
+              <div className="hero-gradient" />
+            </div>
 
-              <div style={{marginTop: '30px'}}>
-                <span style={{fontSize: '11px', color: '#444', letterSpacing: '2px', fontWeight: 'bold'}}>WATCH NOW</span>
-                <div className="platform-grid">
-                  {selectedMovie.platforms.map((p: any) => (
-                    <div key={p.name} className="platform-card">
-                      <div className="logo-box">
-                        <img src={p.logo} alt={p.name} />
+            {/* 상세 내용 */}
+            <div className="detail-info">
+              <h1 className="main-title">{selectedMovie.mi_title}</h1>
+              <div className="meta-row">
+                <span className="rating-text">평점 {selectedMovie.mi_rating}</span>
+                <span>{selectedMovie.mi_release_date}</span>
+              </div>
+              <p className="summary">{selectedMovie.mi_summary}</p>
+
+              <div style={{marginTop: '40px'}}>
+                <span className="ott-title">시청 가능한 플랫폼</span>
+                <div className="ott-grid">
+                  {selectedMovie.mi_networks && selectedMovie.mi_networks.length > 0 ? (
+                    selectedMovie.mi_networks.map((net: any, idx: number) => (
+                      <div key={idx} className="ott-item">
+                        <img src={net.logo} className="ott-logo" alt={net.name} />
+                        <span style={{fontSize: '11px', color: '#808080'}}>{net.name}</span>
                       </div>
-                      <span style={{fontSize: '10px', color: '#555'}}>바로가기</span>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <p style={{color: '#555', fontSize: '14px'}}>제공되는 OTT 정보가 없습니다.</p>
+                  )}
                 </div>
               </div>
             </div>
