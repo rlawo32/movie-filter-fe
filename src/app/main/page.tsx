@@ -13,18 +13,18 @@ const Main = () => {
 
     return (
         <Style.Main>
-            <div className="main_start">
-                <Option />
-                {
-                    process === 4 ? 
+            <Option />
+            {
+                process === 4 ? 
+                    <div className="main_start">
                         <button className="main_button" onClick={() => setProcess(1)}>시작하기</button> 
-                        : 
-                    process === 0 ? 
-                        <Movie />
-                        :
-                        <></>
-                }
-            </div>
+                    </div>
+                    : 
+                process === 0 ? 
+                    <Movie />
+                    :
+                    <></>
+            }
         </Style.Main>
     )
 }

@@ -1,11 +1,11 @@
-
 import styled from "styled-components";
 
 export const Movie = styled('div')`
     position: relative;
     display: flex;
     width: 100%;
-    padding: 25px;
+    height: fit-content;
+    padding: 80px 25px;
 
     .movie_header {
 
@@ -13,7 +13,6 @@ export const Movie = styled('div')`
 
     .movie_body {
         display: flex;
-        align-items: center;
         justify-content: center;
         width: 100%;
 
@@ -39,6 +38,7 @@ export const MovieCard = styled('div')<{$image:string}>`
     border-radius: 10px;
     background-color: rgb(43 43 48 / 1);
     overflow: hidden;
+    cursor: pointer;
 
     .card_container {
         position: relative;
@@ -68,7 +68,7 @@ export const MovieCard = styled('div')<{$image:string}>`
                 left: 0;
                 width: 100%;
                 height: 99%;
-                background-image: ${({$image}) => "url(" + $image + ")"};
+                background-image: ${({$image}) => "url('" + $image + "')"};
                 background-size: 100%;
                 background-repeat: no-repeat;
             }
@@ -106,15 +106,17 @@ export const MovieCard = styled('div')<{$image:string}>`
             .card_genres {
                 display: flex;
                 flex-wrap: wrap;
+                align-items: center;
                 gap: 5px;
                 padding: 5px 15px;
 
                 .card_genre {
-                    padding: 2px 7px;
+                    padding: 0 7px;
                     border: none;
                     border-radius: 7px;
                     background-color: #000000;
                     font-size: 1rem;
+                    line-height: 1.7;
                 }
             }
         }

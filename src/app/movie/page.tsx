@@ -2,7 +2,7 @@
 
 import * as Style from "./page.style";
 
-import useMainProcessStore from "./stores/useModalProcessStore";
+import useMainProcessStore from "../stores/useMainProcessStore";
 
 import * as data from "./temp";
 
