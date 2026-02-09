@@ -2,7 +2,7 @@
 
 import * as Style from "./page.style";
 
-import useMainProcessStore from "../stores/useMainProcessStore";
+import useMainProcessStore from "./stores/useModalProcessStore";
 
 import * as data from "./temp";
 
@@ -19,22 +19,25 @@ const Movie = () => {
                 <div className="list_section">
                     {data.data.map((item, idx1) => {
                         return (
-                            <div className="movie_card" key={idx1}>
-                                <div className="card_image">
-                                    <img src={item.poster} alt={item.title} />
-                                </div>
-                                <div className="card_content">
-                                    <div className="card_title">{item.title}</div>
-                                    <div className="card_year">{item.year}</div>
-                                    <div className="card_genres">
-                                        {item.genres.map((genre, idx2) => {
-                                            return (
-                                                <div className="card_genre" key={idx2}>{genre}</div>
-                                            )
-                                        })} 
+                            <Style.MovieCard $image={item.poster} key={idx1}>
+                                <div className="card_container">
+                                    <div className="card_head">
+                                        <div className="card_image"></div>
+                                        <div className="card_effect"></div>
+                                    </div>
+                                    <div className="card_body">
+                                        <div className="card_genres">
+                                            {item.genres.map((genre, idx2) => {
+                                                return (
+                                                    <div className="card_genre" key={idx2}>{genre}</div>
+                                                )
+                                            })} 
+                                        </div>
+                                        <div className="card_title">{item.title}</div>
+                                        <div className="card_year">{item.year}</div>
                                     </div>
                                 </div>
-                            </div>
+                            </Style.MovieCard>
                         )
                     })}
                 </div>
