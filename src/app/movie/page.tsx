@@ -2,6 +2,10 @@
 
 import * as Style from "./page.style";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart as favorite1 } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as favorite2 } from "@fortawesome/free-solid-svg-icons";
+
 import useMainProcessStore from "../stores/useMainProcessStore";
 
 import * as data from "./temp";
@@ -21,9 +25,12 @@ const Movie = () => {
                         return (
                             <Style.MovieCard $image={item.poster} key={idx1}>
                                 <div className="card_container">
+                                    <button className="card_favorite">
+                                        <FontAwesomeIcon icon={favorite1} className="icon" />
+                                    </button>
                                     <div className="card_head">
-                                        <div className="card_image"></div>
-                                        <div className="card_effect"></div>
+                                        <div className="card_image" />
+                                        <div className="card_effect" />
                                     </div>
                                     <div className="card_body">
                                         <div className="card_genres">
