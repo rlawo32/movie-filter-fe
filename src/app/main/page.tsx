@@ -15,6 +15,7 @@ const Main = () => {
         <Style.Main>
             <Option />
             {
+                // process 0:시작 -> 1:인원 -> 2:감정 -> 3:장르 -> 4:결과 
                 process === 4 ? 
                     <div className="main_start">
                         <button className="main_button" onClick={() => setProcess(1)}>시작하기</button> 

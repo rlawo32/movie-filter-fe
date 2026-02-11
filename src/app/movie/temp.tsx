@@ -60,9 +60,9 @@ export const data:{
     overview: "판도라를 위협하는 재의 부족, 더 이상 인간만이 적이 아니다! 모두의 운명을 뒤흔들 거대한 전투가 시작된다!", 
     poster: "https://search.pstatic.net/common?quality=75&direct=true&src=https%3A%2F%2Fmovie-phinf.pstatic.net%2F20251217_118%2F1765951474121LjtOH_JPEG%2Fmovie_image.jpg", 
     platforms: [
-      { name: "NETFLIX", logo: "/images/logos/netflix.png" },
-      { name: "TVING", logo: "/images/logos/tving.png" },
-      { name: "WATCHA", logo: "/images/logos/watcha.png" },
+      { name: "AMAZON", logo: "/images/logos/netflix.png" },
+      { name: "DISNEY", logo: "/images/logos/tving.png" },
+      { name: "COUPANG", logo: "/images/logos/watcha.png" },
     ]
   },
   { 

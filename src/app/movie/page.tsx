@@ -25,6 +25,13 @@ const Movie = () => {
                         return (
                             <Style.MovieCard $image={item.poster} key={idx1}>
                                 <div className="card_container">
+                                    <div className="card_ott">
+                                        {item.platforms.map((platform, idx2) => {
+                                            return (
+                                                <Style.PlatformBadge $image={platform.name} key={idx2} />
+                                            )
+                                        })} 
+                                    </div>
                                     <button className="card_favorite">
                                         <FontAwesomeIcon icon={favorite1} className="icon" />
                                     </button>

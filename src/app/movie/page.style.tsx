@@ -66,6 +66,15 @@ export const MovieCard = styled('div')<{$image:string}>`
             transition: transform .4s ease-in-out;
         }
 
+        .card_ott {
+            position: absolute;
+            top: 3px;
+            left: 0;
+            display: flex;
+            align-items: center;
+            z-index: 99;
+        }
+
         .card_favorite {
             @media (max-width: 768px) {
                 top: 7px;
@@ -93,7 +102,7 @@ export const MovieCard = styled('div')<{$image:string}>`
 
             &:hover {
                 background: rgba(255, 255, 255, 0.4);
-                transform: scale(1.1);
+                /* transform: scale(1.1); */
             }
 
             .icon {
@@ -196,4 +205,18 @@ export const MovieCard = styled('div')<{$image:string}>`
             }
         }
     }
+`
+
+export const PlatformBadge = styled('div')<{$image:string}>`
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    margin-left: 3px;
+    border: none;
+    border-radius: 50%;
+    background-image: ${({$image}) => $image === 'COUPANG' ? "url('/images/logos/" + $image + ".webp')" : "url('/images/logos/" + $image + ".svg')"};
+    background-repeat: no-repeat;
+    background-size: ${({$image}) => $image === 'NETFLIX' || $image === 'TVING' || $image === 'WATCHA' ? 100 : $image === 'COUPANG' ? 150 : 95 }%;
+    background-position: center;
+    background-color: ${({$image}) => $image === 'NETFLIX' || $image === 'TVING' || $image === 'WATCHA' ? '#000000' : $image === 'WAVVE' ? '#0154FA' : '#FFFFFF' };
 `
