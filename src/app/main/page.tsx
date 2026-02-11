@@ -5,6 +5,7 @@ import * as Style from "./page.style";
 import useMainProcessStore from "../stores/useMainProcessStore";
 
 import Option from "./components/option";
+import Movie from "../movie/page";
 
 const Main = () => {
 
@@ -12,10 +13,18 @@ const Main = () => {
 
     return (
         <Style.Main>
-            <div className="main_start">
-                <Option />
-                {process > 0 ? <></> : <button className="main_button" onClick={() => setProcess(1)}>시작하기</button>}
-            </div>
+            <Option />
+            {
+                process === 4 ? 
+                    <div className="main_start">
+                        <button className="main_button" onClick={() => setProcess(1)}>시작하기</button> 
+                    </div>
+                    : 
+                process === 0 ? 
+                    <Movie />
+                    :
+                    <></>
+            }
         </Style.Main>
     )
 }
