@@ -1,4 +1,15 @@
-import styled from "styled-components";
+import styled, { keyframes, css } from 'styled-components';
+
+const fadeInUp = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 export const Movie = styled('div')`
     position: relative;
@@ -31,7 +42,7 @@ export const Movie = styled('div')`
     }
 `
 
-export const MovieCard = styled('div')<{$image:string}>`
+export const MovieCard = styled('div')<{$image:string; $idx:number}>`
     position: relative;
     @media (max-width: 1440px) {
         width: calc(90% / 4);
@@ -45,6 +56,9 @@ export const MovieCard = styled('div')<{$image:string}>`
     border-radius: 10px;
     background-color: rgb(43 43 48 / 1);
     overflow: hidden;
+    animation: ${fadeInUp} 0.5s ease-out forwards;
+    animation-delay: ${({$idx}) => $idx * 0.1}s;
+    opacity: 0;
     cursor: pointer;
 
     .card_container {
@@ -64,15 +78,6 @@ export const MovieCard = styled('div')<{$image:string}>`
 
         &:not(:hover) > .card_head > .card_image {
             transition: transform .4s ease-in-out;
-        }
-
-        .card_ott {
-            position: absolute;
-            top: 3px;
-            left: 0;
-            display: flex;
-            align-items: center;
-            z-index: 99;
         }
 
         .card_favorite {
@@ -147,60 +152,84 @@ export const MovieCard = styled('div')<{$image:string}>`
         .card_body {
             @media (max-width: 768px) {
                 position: relative;
-                align-items: flex-start;
+                justify-content: flex-start;
                 padding: 20px 5px;
             }
             position: absolute;
             bottom: 5px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between;
             width: 100%;
-            color: #FFFFFF;
+            height: 97%;
 
-            .card_title {
-                @media (max-width: 1024px) {
-                    font-size: 1.2rem;
-                }
+            .card_ott {
                 @media (max-width: 768px) {
-                    font-size: 1.8rem;
+                    position: absolute;
+                    bottom: 8px;
+                    left: 13px;
                 }
-                padding: 0 15px;
-                font-size: 1.5rem;
-                font-weight: 700;
-            }
-
-            .card_year {
-                @media (max-width: 1024px) {
-                    font-size: 1rem;
-                }
-                @media (max-width: 768px) {
-                    font-size: 1.2rem;
-                }
-                padding: 5px 15px;
-                font-size: 1.2rem;
-            }
-
-            .card_genres {
                 display: flex;
-                flex-wrap: wrap;
                 align-items: center;
-                gap: 5px;
-                padding: 5px 15px;
+                z-index: 99;
+            }
 
-                .card_genre {
+            .card_content {
+                @media (max-width: 768px) {
+                    align-items: flex-start;
+                }
+                position: relative;
+                bottom: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                color: #FFFFFF;
+
+                .card_title {
                     @media (max-width: 1024px) {
-                        font-size: .8rem;
+                        font-size: 1.2rem;
                     }
                     @media (max-width: 768px) {
+                        font-size: 1.8rem;
+                    }
+                    padding: 0 15px;
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                }
+
+                .card_year {
+                    @media (max-width: 1024px) {
                         font-size: 1rem;
                     }
-                    padding: 0 7px;
-                    border: none;
-                    border-radius: 7px;
-                    background-color: #000000;
-                    font-size: 1rem;
-                    line-height: 1.7;
+                    @media (max-width: 768px) {
+                        font-size: 1.2rem;
+                    }
+                    padding: 5px 15px;
+                    font-size: 1.2rem;
+                }
+
+                .card_genres {
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    gap: 5px;
+                    padding: 5px 15px;
+
+                    .card_genre {
+                        @media (max-width: 1024px) {
+                            font-size: .8rem;
+                        }
+                        @media (max-width: 768px) {
+                            font-size: 1rem;
+                        }
+                        padding: 0 7px;
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        border-radius: 7px;
+                        background-color: rgba(0, 0, 0, 0.4);
+                        backdrop-filter: blur(4px);
+                        font-size: 1rem;
+                        line-height: 1.7;
+                    }
                 }
             }
         }
@@ -208,6 +237,12 @@ export const MovieCard = styled('div')<{$image:string}>`
 `
 
 export const PlatformBadge = styled('div')<{$image:string}>`
+    @media (max-width: 768px) {
+        width: 30px;
+        height: 30px;
+        margin-left: 5px;
+        border-radius: 10px;
+    }
     display: inline-block;
     width: 25px;
     height: 25px;
@@ -216,7 +251,7 @@ export const PlatformBadge = styled('div')<{$image:string}>`
     border-radius: 50%;
     background-image: ${({$image}) => $image === 'COUPANG' ? "url('/images/logos/" + $image + ".webp')" : "url('/images/logos/" + $image + ".svg')"};
     background-repeat: no-repeat;
-    background-size: ${({$image}) => $image === 'NETFLIX' || $image === 'TVING' || $image === 'WATCHA' ? 100 : $image === 'COUPANG' ? 150 : 95 }%;
+    background-size: ${({$image}) => $image === 'NETFLIX' || $image === 'TVING' || $image === 'WATCHA' ? 100 : $image === 'COUPANG' ? 150 : 85 }%;
     background-position: center;
     background-color: ${({$image}) => $image === 'NETFLIX' || $image === 'TVING' || $image === 'WATCHA' ? '#000000' : $image === 'WAVVE' ? '#0154FA' : '#FFFFFF' };
 `
