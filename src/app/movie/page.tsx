@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as favorite1 } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as favorite2 } from "@fortawesome/free-solid-svg-icons";
 
-import useMainProcessStore from "../stores/useMainProcessStore";
+import useMainProcessStore from "./stores/useModalProcessStore";
 
 import * as data from "./temp";
 
@@ -23,15 +23,8 @@ const Movie = () => {
                 <div className="list_section">
                     {data.data.map((item, idx1) => {
                         return (
-                            <Style.MovieCard $image={item.poster} key={idx1}>
+                            <Style.MovieCard $image={item.poster} $idx={idx1} key={idx1}>
                                 <div className="card_container">
-                                    <div className="card_ott">
-                                        {item.platforms.map((platform, idx2) => {
-                                            return (
-                                                <Style.PlatformBadge $image={platform.name} key={idx2} />
-                                            )
-                                        })} 
-                                    </div>
                                     <button className="card_favorite">
                                         <FontAwesomeIcon icon={favorite1} className="icon" />
                                     </button>
@@ -40,15 +33,24 @@ const Movie = () => {
                                         <div className="card_effect" />
                                     </div>
                                     <div className="card_body">
-                                        <div className="card_genres">
-                                            {item.genres.map((genre, idx2) => {
+                                        <div className="card_ott">
+                                            {item.platforms.map((platform, idx2) => {
                                                 return (
-                                                    <div className="card_genre" key={idx2}>{genre}</div>
+                                                    <Style.PlatformBadge $image={platform.name} key={idx2} />
                                                 )
                                             })} 
                                         </div>
-                                        <div className="card_title">{item.title}</div>
-                                        <div className="card_year">{item.year}</div>
+                                        <div className="card_content">
+                                            <div className="card_genres">
+                                                {item.genres.map((genre, idx2) => {
+                                                    return (
+                                                        <div className="card_genre" key={idx2}>{genre}</div>
+                                                    )
+                                                })} 
+                                            </div>
+                                            <div className="card_title">{item.title}</div>
+                                            <div className="card_year">{item.year}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </Style.MovieCard>
