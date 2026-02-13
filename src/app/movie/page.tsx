@@ -6,13 +6,30 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as favorite1 } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as favorite2 } from "@fortawesome/free-solid-svg-icons";
 
+import { useState } from "react";
+
 import useMainProcessStore from "./stores/useModalProcessStore";
 
 import * as data from "./temp";
+import Modal from "./components/modal";
 
 const Movie = () => {
 
     const {process, setProcess} = useMainProcessStore();
+
+    const [modalData, setModalData] = useState<{
+        id: number,
+        title: string,
+        year: string,
+        matchRate: number,
+        genres: string[],
+        overview: string,
+        poster: string,
+        platforms: {
+          name: string,
+          logo: string
+        }[]
+    } | null>();
 
     return (
         <Style.Movie>
@@ -20,12 +37,13 @@ const Movie = () => {
                 
             </div>
             <div className="movie_body">
+                {modalData && (<Modal data={modalData} onClose={() => setModalData(null)} />)}
                 <div className="list_section">
                     {data.data.map((item, idx1) => {
                         return (
-                            <Style.MovieCard $image={item.poster} $idx={idx1} key={idx1}>
+                            <Style.MovieCard $image={item.poster} $idx={idx1} key={idx1} onClick={() => setModalData(item)}>
                                 <div className="card_container">
-                                    <button className="card_favorite">
+                                    <button className="card_favorite" onClick={(e) => { e.stopPropagation(); }}>
                                         <FontAwesomeIcon icon={favorite1} className="icon" />
                                     </button>
                                     <div className="card_head">
