@@ -13,6 +13,7 @@ interface ModalProps {
         genres: string[],
         overview: string,
         poster: string,
+        backdrop: string,
         platforms: {
           name: string,
           logo: string
@@ -51,15 +52,11 @@ const Modal = (props : ModalProps) => {
 
     return (
         <Style.ModalOverlay $isClosing={isClose} onClick={handleClose}>
-            <Style.ModalContent $isClosing={isClose} $image={props.data.poster} onClick={(e) => e.stopPropagation()}>
-                <div className="modal_head">
-
-                </div>
+            <Style.ModalContent $isClosing={isClose} $image={props.data.backdrop} onClick={(e) => e.stopPropagation()}>
+                <div className="modal_head" />
                 <div className="modal_body">
-
+                    {props.data.title}
                 </div>
-                <h1>HELLO</h1>
-                {props.data.title}
             </Style.ModalContent>
         </Style.ModalOverlay>
     )
