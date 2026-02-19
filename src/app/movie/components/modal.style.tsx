@@ -30,7 +30,7 @@ export const ModalOverlay = styled.div<{ $isClosing: boolean }>`
 export const ModalContent = styled.div<{ $isClosing: boolean; $image: string}>`
     position: relative;
     width: 90%;
-    max-width: 800px;
+    max-width: 1024px;
     height: 80%;
     border-radius: 20px;
     background: #1e1e22;
@@ -47,28 +47,30 @@ export const ModalContent = styled.div<{ $isClosing: boolean; $image: string}>`
         top: 0;
         left: 0;
         width: 100%;
-        height: 99%;
-        background-image: ${({$image}) => "url('" + $image + "')"};
-        background-size: cover;
+        height: 70%;
+        background-color: rgb(13, 13, 18);
+        background-image: linear-gradient(75deg, rgba(13, 13, 18, 1) 10%, rgba(13, 13, 18, 0.6) 30%, rgba(13, 13, 18, 0) 40%), ${({$image}) => "url('" + $image + "')"};
         background-repeat: no-repeat;
-        background-position: center 20%;
+        background-position: right top; 
+        background-size: 95%;
+        z-index: 1001;
+        -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+        mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
     }
 
     .modal_body {
-        @media (max-width: 768px) {
-            background-image: linear-gradient(rgba(13, 13, 18, 0) 40%, rgb(13, 13, 18) 95%);
-        }
-        position: absolute;
+        position: relative;
         top: 0;
         left: 0;
         width: 100%;
-        height: 100%;
+        min-height: 100%;
         background-image: linear-gradient(
             to bottom,
             rgba(13, 13, 18, 0) 0%,
-            rgba(13, 13, 18, 0) 30%, 
-            rgba(13, 13, 18, 0.7) 40%,
-            rgb(13, 13, 18) 75%
+            rgba(13, 13, 18, 0) 10%, 
+            rgba(13, 13, 18, 0.7) 70%,
+            rgb(13, 13, 18) 85%
         );
+        z-index: 1002;
     }
 `;
