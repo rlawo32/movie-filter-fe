@@ -1,5 +1,6 @@
 'use client'
 
+import CloseIcon from "./closeIcon";
 import * as Style from "./modal.style";
 
 import { useEffect, useState } from "react";
@@ -11,7 +12,7 @@ interface ModalProps {
         year: string,
         matchRate: number,
         genres: string[],
-        overview: string,
+        summary: string,
         poster: string,
         backdrop: string,
         platforms: {
@@ -53,9 +54,25 @@ const Modal = (props : ModalProps) => {
     return (
         <Style.ModalOverlay $isClosing={isClose} onClick={handleClose}>
             <Style.ModalContent $isClosing={isClose} $image={props.data.backdrop} onClick={(e) => e.stopPropagation()}>
+                <button className="modal_close" onClick={() => handleClose()}><CloseIcon /></button>
                 <div className="modal_head" />
                 <div className="modal_body">
-                    {props.data.title}
+                    <div className="modal_content_bottom"></div>
+                    <div className="modal_content_top">
+                        <div className="movie_title">
+                            {props.data.title}
+                        </div>
+                        <div className="movie_genres">
+                            {props.data.genres.map((genre, idx) => {
+                                return (
+                                    <div className="movie_genre" key={"genre_" + idx}>{genre}</div>
+                                )
+                            })} 
+                        </div>
+                        <div className="movie_summary">
+                            {props.data.summary}
+                        </div>
+                    </div>
                 </div>
             </Style.ModalContent>
         </Style.ModalOverlay>
