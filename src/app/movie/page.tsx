@@ -6,9 +6,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as favorite1 } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as favorite2 } from "@fortawesome/free-solid-svg-icons";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import useMainProcessStore from "./stores/useModalProcessStore";
+import useMainProcessStore from "../stores/useMainProcessStore";
 
 import * as data from "./temp";
 import Modal from "./components/modal";
@@ -23,13 +23,20 @@ const Movie = () => {
         year: string,
         matchRate: number,
         genres: string[],
-        overview: string,
+        summary: string,
         poster: string,
+        backdrop: string,
         platforms: {
           name: string,
           logo: string
         }[]
     } | null>();
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        // mount 오류 처리
+        setIsMounted(true);
+    }, []);
 
     return (
         <Style.Movie>
@@ -39,7 +46,7 @@ const Movie = () => {
             <div className="movie_body">
                 {modalData && (<Modal data={modalData} onClose={() => setModalData(null)} />)}
                 <div className="list_section">
-                    {data.data.map((item, idx1) => {
+                    {isMounted && data.data.map((item, idx1) => {
                         return (
                             <Style.MovieCard $image={item.poster} $idx={idx1} key={idx1} onClick={() => setModalData(item)}>
                                 <div className="card_container">
@@ -54,15 +61,15 @@ const Movie = () => {
                                         <div className="card_ott">
                                             {item.platforms.map((platform, idx2) => {
                                                 return (
-                                                    <Style.PlatformBadge $image={platform.name} key={idx2} />
+                                                    <Style.PlatformBadge $image={platform.name} key={platform.name + idx2} />
                                                 )
                                             })} 
                                         </div>
                                         <div className="card_content">
                                             <div className="card_genres">
-                                                {item.genres.map((genre, idx2) => {
+                                                {item.genres.map((genre, idx3) => {
                                                     return (
-                                                        <div className="card_genre" key={idx2}>{genre}</div>
+                                                        <div className="card_genre" key={"genre_" + idx3}>{genre}</div>
                                                     )
                                                 })} 
                                             </div>

@@ -1,5 +1,7 @@
 import styled, { keyframes, css } from 'styled-components';
 
+const defaultImageUrl:string|undefined = process.env.NEXT_PUBLIC_DEFAULT_IMAGE_URL;
+
 const fadeInUp = keyframes`
   0% {
     opacity: 0;
@@ -280,7 +282,7 @@ export const PlatformBadge = styled('div')<{$image:string}>`
     margin-left: 3px;
     border: none;
     border-radius: 50%;
-    background-image: ${({$image}) => "url('/images/logos/" + $image + ($image === 'COUPANG' ? ".webp')" : $image === 'WAVVE' ? ".png')" : ".svg')") };
+    background-image: ${({$image}) => "url('" + defaultImageUrl + "/platform/" + $image + ($image === 'COUPANG' ? ".webp')" : $image === 'WAVVE' ? ".png')" : ".svg')") };
     background-repeat: no-repeat;
     background-size: ${({$image}) => $image === 'AMAZON' || $image === 'DISNEY' ? 85 : $image === 'COUPANG' ? 150 : 100}%;
     background-position: center;
