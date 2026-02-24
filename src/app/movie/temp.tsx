@@ -11,6 +11,10 @@ export const data:{
         platforms: {
           name: string,
           logo: string
+        }[],
+        rating: {
+          name: string,
+          score: number
         }[]
     }[] = [
   { 
@@ -26,6 +30,10 @@ export const data:{
       { name: "NETFLIX", logo: "/images/logos/netflix.png" },
       { name: "TVING", logo: "/images/logos/tving.png" },
       { name: "WATCHA", logo: "/images/logos/watcha.png" },
+    ],
+    rating: [
+      { name: "TMDB", score: 8.7},
+      { name: "IMDB", score: 7.7}
     ]
   },
   { 
@@ -40,6 +48,12 @@ export const data:{
     platforms: [
       { name: "WAVVE", logo: "/images/logos/wavve.png" },
       { name: "WATCHA", logo: "/images/logos/watcha.png" },
+    ],
+    rating: [
+      { name: "METACRITIC", score: 97},
+      { name: "TOMATO", score: 87},
+      { name: "TMDB", score: 8.7},
+      { name: "IMDB", score: 7.7}
     ]
   },
   { 
@@ -53,6 +67,11 @@ export const data:{
     backdrop: "https://media.themoviedb.org/t/p/original/ylkdrn23p3gQcHx7ukIfuy2CkTE.jpg",
     platforms: [
       { name: "TVING", logo: "/images/logos/tving.png" },
+    ],
+    rating: [
+      { name: "METACRITIC", score: 79},
+      { name: "TMDB", score: 9.3},
+      { name: "IMDB", score: 8.2}
     ]
   },
   { 
@@ -68,6 +87,11 @@ export const data:{
       { name: "AMAZON", logo: "/images/logos/netflix.png" },
       { name: "DISNEY", logo: "/images/logos/tving.png" },
       { name: "COUPANG", logo: "/images/logos/watcha.png" },
+    ],
+    rating: [
+      { name: "TOMATO", score: 59},
+      { name: "TMDB", score: 7.4},
+      { name: "IMDB", score: 9.2}
     ]
   },
   { 
@@ -82,6 +106,12 @@ export const data:{
     platforms: [
       { name: "NETFLIX", logo: "/images/logos/netflix.png" },
       { name: "WAVVE", logo: "/images/logos/wavve.png" },
+    ],
+    rating: [
+      { name: "METACRITIC", score: 94},
+      { name: "TOMATO", score: 89},
+      { name: "TMDB", score: 9.1},
+      { name: "IMDB", score: 8.6}
     ]
   },
   { 
@@ -96,6 +126,10 @@ export const data:{
     platforms: [
       { name: "NETFLIX", logo: "/images/logos/netflix.png" },
       { name: "WATCHA", logo: "/images/logos/watcha.png" },
+    ],
+    rating: [
+      { name: "TMDB", score: 4.7},
+      { name: "IMDB", score: 2.7}
     ]
   },
   { 
@@ -109,6 +143,10 @@ export const data:{
     backdrop: "https://media.themoviedb.org/t/p/original/dHSz0tSFuO2CsXJ1CApSauP9Ncl.jpg",
     platforms: [
       { name: "WATCHA", logo: "/images/logos/watcha.png" },
+    ],
+    rating: [
+      { name: "METACRITIC", score: 64},
+      { name: "TOMATO", score: 49},
     ]
   },
   { 
@@ -121,6 +159,10 @@ export const data:{
     poster: "https://media.themoviedb.org/t/p/w500/llj8dIkLSHOG1X7aFXims2IaCU5.jpg", 
     backdrop: "https://media.themoviedb.org/t/p/original/x1j5VVU4ypEx1hM0PDYGwCJvwtS.jpg",
     platforms: [
+    ],
+    rating: [
+      { name: "METACRITIC", score: 44},
+      { name: "IMDB", score: 2.6}
     ]
   },
   { 
@@ -135,6 +177,10 @@ export const data:{
     platforms: [
       { name: "WAVVE", logo: "/images/logos/wavve.png" },
       { name: "TVING", logo: "/images/logos/tving.png" },
+    ],
+    rating: [
+      { name: "METACRITIC", score: 100},
+      { name: "TOMATO", score: 85},
     ]
   },
   { 
@@ -148,6 +194,9 @@ export const data:{
     backdrop: "https://media.themoviedb.org/t/p/original/1kuYEvLkX2nTkbfzN6X0w0xQFQU.jpg",
     platforms: [
       { name: "NETFLIX", logo: "/images/logos/netflix.png" },
+    ],
+    rating: [
+      { name: "IMDB", score: 6.2}
     ]
   },
   { 
@@ -163,6 +212,10 @@ export const data:{
       { name: "WAVVE", logo: "/images/logos/wavve.png" },
       { name: "TVING", logo: "/images/logos/tving.png" },
       { name: "WATCHA", logo: "/images/logos/watcha.png" },
+    ],
+    rating: [
+      { name: "METACRITIC", score: 64},
+      { name: "TOMATO", score: 59},
     ]
   },
   { 
@@ -177,6 +230,10 @@ export const data:{
     platforms: [
       { name: "NETFLIX", logo: "/images/logos/netflix.png" },
       { name: "WATCHA", logo: "/images/logos/watcha.png" },
+    ],
+    rating: [
+      { name: "METACRITIC", score: 74},
+      { name: "TMDB", score: 9.7},
     ]
   },
   { 
@@ -191,6 +248,12 @@ export const data:{
     platforms: [
       { name: "WAVVE", logo: "/images/logos/wavve.png" },
       { name: "TVING", logo: "/images/logos/tving.png" },
+    ],
+    rating: [
+      { name: "METACRITIC", score: 98},
+      { name: "TOMATO", score: 82},
+      { name: "TMDB", score: 10.0},
+      { name: "IMDB", score: 7.9}
     ]
   },
 ];
