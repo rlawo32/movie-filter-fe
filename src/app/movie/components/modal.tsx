@@ -18,6 +18,10 @@ interface ModalProps {
         platforms: {
           name: string,
           logo: string
+        }[],
+        rating: {
+          name: string,
+          score: number
         }[]
     };
     onClose: () => void;
@@ -25,6 +29,7 @@ interface ModalProps {
 
 const Modal = (props : ModalProps) => {
 
+    const defaultImageUrl:string|undefined = process.env.NEXT_PUBLIC_DEFAULT_IMAGE_URL;
     const [isClose, setIsClose] = useState<boolean>(false);
 
     const handleClose = () => {
@@ -59,18 +64,54 @@ const Modal = (props : ModalProps) => {
                 <div className="modal_body">
                     <div className="modal_content_bottom"></div>
                     <div className="modal_content_top">
-                        <div className="movie_title">
-                            {props.data.title}
+                        <div className="modal_content_left">
+                            <div className="movie_title">
+                                {props.data.title}
+                            </div>
+                            <div className="movie_genres">
+                                {props.data.genres.map((genre, idx) => {
+                                    return (
+                                        <div className="movie_genre" key={"genre_" + idx}>{genre}</div>
+                                    )
+                                })} 
+                            </div>
+                            <div className="movie_summary">
+                                {props.data.summary}
+                            </div>
+                            <div className="movie_shortcut">
+                                {props.data.platforms.map((platform, idx) => {
+                                    return (
+                                        <Style.PlatformBadge $image={platform.name} key={"ott_" + idx} />
+                                    )
+                                })} 
+                            </div>
                         </div>
-                        <div className="movie_genres">
-                            {props.data.genres.map((genre, idx) => {
+                        <div className="modal_content_right">
+                            {props.data.rating.map((rate, idx) => {
+                                const score = rate.name === 'IMDB' || rate.name === 'TMDB' ? rate.score * 10 : rate.score;
                                 return (
-                                    <div className="movie_genre" key={"genre_" + idx}>{genre}</div>
+                                    <Style.RatingBadge $score={score} key={"ott_" + idx}>
+                                        <div className="rating_score">
+                                            <img src={defaultImageUrl + "/platform/" + rate.name + ".svg"} alt="rating_platform" />
+                                            <div className="score_detail">
+                                                <div className="score_view">
+                                                    {rate.name === 'IMDB' ? score / 10 : score}{rate.name === 'TOMATO' || rate.name === 'TMDB' ? '%' : ''}
+                                                </div>
+                                                <div className="score_title">
+                                                    {rate.name === 'TOMATO' ? 'Tomatometer' : rate.name === 'METACRITIC' ? 'Metascore' : rate.name}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="rating_graph">
+                                            <div className="graph_container">
+                                                <div className="graph_bar">
+                                                    <div className="graph_glow" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </Style.RatingBadge>
                                 )
                             })} 
-                        </div>
-                        <div className="movie_summary">
-                            {props.data.summary}
                         </div>
                     </div>
                 </div>
