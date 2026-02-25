@@ -35,21 +35,29 @@ const Option = () => {
 
     const {process, setProcess, optionArr, setOptionArr, removeOptionArr, selectPersonnel, optionClean} = useMainProcessStore();
 
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
     const { data: optionAll } = useQuery(getOptionAllQuery(supabase), {staleTime: Infinity, gcTime: 1000 * 60 * 60});
 
     const [optionData, setOptionData] = useState<{option_title:string}[]>([]);
 
     const recommendMovieActive = () => {
+        if(isLoading) return;
+        setIsLoading(true);
+
         axios({
             method: "POST",
-            url: "/local/test/search",
+            url: "/local/api/recommend/search",
             data: optionArr,
             headers: {'Content-type': 'application/json'}
         }).then((res):void => {
             console.log(res.data);
+            alert("추천 성공")
         }).catch((err):void => {
             alert("서버를 확인해주세요.");
             console.log(err.message);
+        }).finally(() => {
+            setIsLoading(false);
         })
     }
 
