@@ -29,6 +29,10 @@ const Movie = () => {
         platforms: {
           name: string,
           logo: string
+        }[],
+        rating: {
+          name: string,
+          score: number
         }[]
     } | null>();
     const [isMounted, setIsMounted] = useState(false);
