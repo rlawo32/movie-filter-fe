@@ -6,13 +6,41 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as favorite1 } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as favorite2 } from "@fortawesome/free-solid-svg-icons";
 
+import { useEffect, useState } from "react";
+
 import useMainProcessStore from "../stores/useMainProcessStore";
 
 import * as data from "./temp";
+import Modal from "./components/modal";
 
 const Movie = () => {
 
     const {process, setProcess} = useMainProcessStore();
+
+    const [modalData, setModalData] = useState<{
+        id: number,
+        title: string,
+        year: string,
+        matchRate: number,
+        genres: string[],
+        summary: string,
+        poster: string,
+        backdrop: string,
+        platforms: {
+          name: string,
+          logo: string
+        }[],
+        rating: {
+          name: string,
+          score: number
+        }[]
+    } | null>();
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        // mount 오류 처리
+        setIsMounted(true);
+    }, []);
 
     return (
         <Style.Movie>
@@ -20,12 +48,13 @@ const Movie = () => {
                 
             </div>
             <div className="movie_body">
+                {modalData && (<Modal data={modalData} onClose={() => setModalData(null)} />)}
                 <div className="list_section">
-                    {data.data.map((item, idx1) => {
+                    {isMounted && data.data.map((item, idx1) => {
                         return (
-                            <Style.MovieCard $image={item.poster} key={idx1}>
+                            <Style.MovieCard $image={item.poster} $idx={idx1} key={idx1} onClick={() => setModalData(item)}>
                                 <div className="card_container">
-                                    <button className="card_favorite">
+                                    <button className="card_favorite" onClick={(e) => { e.stopPropagation(); }}>
                                         <FontAwesomeIcon icon={favorite1} className="icon" />
                                     </button>
                                     <div className="card_head">
@@ -33,15 +62,24 @@ const Movie = () => {
                                         <div className="card_effect" />
                                     </div>
                                     <div className="card_body">
-                                        <div className="card_genres">
-                                            {item.genres.map((genre, idx2) => {
+                                        <div className="card_ott">
+                                            {item.platforms.map((platform, idx2) => {
                                                 return (
-                                                    <div className="card_genre" key={idx2}>{genre}</div>
+                                                    <Style.PlatformBadge $image={platform.name} key={platform.name + idx2} />
                                                 )
                                             })} 
                                         </div>
-                                        <div className="card_title">{item.title}</div>
-                                        <div className="card_year">{item.year}</div>
+                                        <div className="card_content">
+                                            <div className="card_genres">
+                                                {item.genres.map((genre, idx3) => {
+                                                    return (
+                                                        <div className="card_genre" key={"genre_" + idx3}>{genre}</div>
+                                                    )
+                                                })} 
+                                            </div>
+                                            <div className="card_title">{item.title}</div>
+                                            <div className="card_year">{item.year}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </Style.MovieCard>
