@@ -15,12 +15,12 @@ const Main = () => {
         <Style.Main>
             <Option />
             {
-                process === 4 ? 
+                process === 0 ? 
                     <div className="main_start">
                         <button className="main_button" onClick={() => setProcess(1)}>시작하기</button> 
                     </div>
                     : 
-                process === 0 ? 
+                process === 4 ? 
                     <Movie />
                     :
                     <></>

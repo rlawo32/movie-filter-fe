@@ -30,27 +30,39 @@ import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { getOptionAllQuery } from "@/app/queries/getOptionQuery";
 import axios from "axios";
 
+
+
 const Option = () => {
     const supabase = useSupabaseBrowser();
 
     const {process, setProcess, optionArr, setOptionArr, removeOptionArr, selectPersonnel, optionClean} = useMainProcessStore();
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const { data: optionAll } = useQuery(getOptionAllQuery(supabase), {staleTime: Infinity, gcTime: 1000 * 60 * 60});
 
     const [optionData, setOptionData] = useState<{option_title:string}[]>([]);
 
     const recommendMovieActive = () => {
+
+        if (isLoading) return; 
+        setIsLoading(true); 
+
         axios({
             method: "POST",
-            url: "/local/test/search",
+            // 백엔드 이름 수정으로 인한 경로 수정 - 20260214 ms
+            url: "/local/api/recommend/search",
             data: optionArr,
             headers: {'Content-type': 'application/json'}
         }).then((res):void => {
-            console.log(res.data);
+            console.log("서버 응답:", res.data);
+            alert("추천 영화가 성공적으로 저장되었습니다!");
         }).catch((err):void => {
             alert("서버를 확인해주세요.");
             console.log(err.message);
-        })
+        }).finally(() => {
+            setIsLoading(false); // 성공하든 실패하든 로딩 해제
+        });
     }
 
     const closeModal = () => {
