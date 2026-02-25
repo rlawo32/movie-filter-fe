@@ -18,7 +18,7 @@ const HeaderStyle = styled('div')`
     padding: 0 50px;
     background-color: #0F0F0F;
     color: white;
-    z-index: 1000;
+    z-index: 500;
 `
 
 /* [작업자: ms / 날짜: 2026-01-17] 로그인 유저 정보 섹션 스타일 추가 */

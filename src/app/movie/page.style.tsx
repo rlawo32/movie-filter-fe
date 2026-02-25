@@ -1,4 +1,17 @@
-import styled from "styled-components";
+import styled, { keyframes, css } from 'styled-components';
+
+const defaultImageUrl:string|undefined = process.env.NEXT_PUBLIC_DEFAULT_IMAGE_URL;
+
+const fadeInUp = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 export const Movie = styled('div')`
     position: relative;
@@ -31,7 +44,7 @@ export const Movie = styled('div')`
     }
 `
 
-export const MovieCard = styled('div')<{$image:string}>`
+export const MovieCard = styled('div')<{$image:string; $idx:number}>`
     position: relative;
     @media (max-width: 1440px) {
         width: calc(90% / 4);
@@ -44,7 +57,9 @@ export const MovieCard = styled('div')<{$image:string}>`
     aspect-ratio: 3 / 5;
     border-radius: 10px;
     background-color: rgb(43 43 48 / 1);
-    overflow: hidden;
+    animation: ${fadeInUp} 0.5s ease-out forwards;
+    animation-delay: ${({$idx}) => $idx * 0.1}s;
+    opacity: 0;
     cursor: pointer;
 
     .card_container {
@@ -67,6 +82,11 @@ export const MovieCard = styled('div')<{$image:string}>`
         }
 
         .card_favorite {
+            @media (max-width: 1024px) {
+                width: 20px;
+                height: 20px;
+                font-size: 1rem;
+            }
             @media (max-width: 768px) {
                 top: 7px;
                 right: 7px;
@@ -93,7 +113,7 @@ export const MovieCard = styled('div')<{$image:string}>`
 
             &:hover {
                 background: rgba(255, 255, 255, 0.4);
-                transform: scale(1.1);
+                /* transform: scale(1.1); */
             }
 
             .icon {
@@ -109,6 +129,7 @@ export const MovieCard = styled('div')<{$image:string}>`
             position: relative;
             width: 100%;
             height: 95%;
+            border-radius: 10px;
             overflow: hidden;
 
             .card_image {
@@ -138,62 +159,173 @@ export const MovieCard = styled('div')<{$image:string}>`
         .card_body {
             @media (max-width: 768px) {
                 position: relative;
-                align-items: flex-start;
+                justify-content: flex-start;
                 padding: 20px 5px;
             }
             position: absolute;
             bottom: 5px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between;
             width: 100%;
-            color: #FFFFFF;
+            height: 97%;
 
-            .card_title {
+            .card_ott {
                 @media (max-width: 1024px) {
-                    font-size: 1.2rem;
+                    margin-top: 3px;
                 }
                 @media (max-width: 768px) {
-                    font-size: 1.8rem;
+                    position: absolute;
+                    bottom: 8px;
+                    left: 13px;
                 }
-                padding: 0 15px;
-                font-size: 1.5rem;
-                font-weight: 700;
-            }
-
-            .card_year {
-                @media (max-width: 1024px) {
-                    font-size: 1rem;
-                }
-                @media (max-width: 768px) {
-                    font-size: 1.2rem;
-                }
-                padding: 5px 15px;
-                font-size: 1.2rem;
-            }
-
-            .card_genres {
                 display: flex;
-                flex-wrap: wrap;
                 align-items: center;
-                gap: 5px;
-                padding: 5px 15px;
+                z-index: 99;
+            }
 
-                .card_genre {
+            .card_content {
+                @media (max-width: 768px) {
+                    align-items: flex-start;
+                }
+                position: relative;
+                bottom: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                color: #FFFFFF;
+
+                .card_title {
                     @media (max-width: 1024px) {
-                        font-size: .8rem;
+                        font-size: 1.2rem;
                     }
                     @media (max-width: 768px) {
+                        font-size: 1.8rem;
+                    }
+                    // mobile_view
+                    @media (max-width: 500px) {
+                        font-size: 1.3rem;
+                    }
+                    padding: 0 15px;
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                }
+
+                .card_year {
+                    @media (max-width: 1024px) {
                         font-size: 1rem;
                     }
-                    padding: 0 7px;
-                    border: none;
-                    border-radius: 7px;
-                    background-color: #000000;
-                    font-size: 1rem;
-                    line-height: 1.7;
+                    @media (max-width: 768px) {
+                        font-size: 1.2rem;
+                    }
+                    // mobile_view
+                    @media (max-width: 500px) {
+                        font-size: 1rem;
+                    }
+                    padding: 5px 15px;
+                    font-size: 1.2rem;
+                }
+
+                .card_genres {
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    gap: 2px;
+                    padding: 5px 15px;
+
+                    .card_genre {
+                        @media (max-width: 1024px) {
+                            font-size: .8rem;
+                        }
+                        @media (max-width: 768px) {
+                            font-size: 1rem;
+                        }
+                        // mobile_view
+                        @media (max-width: 500px) {
+                            font-size: .9rem;
+                        }
+                        padding: 0 7px;
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        border-radius: 7px;
+                        background-color: rgba(0, 0, 0, 0.4);
+                        backdrop-filter: blur(4px);
+                        font-size: 1rem;
+                        line-height: 1.7;
+                    }
                 }
             }
+        }
+    }
+`
+
+export const PlatformBadge = styled('div')<{$image:string}>`
+    @media (max-width: 1024px) {
+        width: 20px;
+        height: 20px;
+    }
+    @media (max-width: 768px) {
+        width: 30px;
+        height: 30px;
+        margin-left: 5px;
+        border-radius: 10px;
+    }
+    // mobile_view
+    @media (max-width: 500px) {
+        width: 22px;
+        height: 22px;
+        border-radius: 5px;
+    }
+    position: relative;
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    margin-left: 3px;
+    border: none;
+    border-radius: 50%;
+    background-image: ${({$image}) => "url('" + defaultImageUrl + "/platform/" + $image + ($image === 'COUPANG' ? ".webp')" : $image === 'WAVVE' ? ".png')" : ".svg')") };
+    background-repeat: no-repeat;
+    background-size: ${({$image}) => $image === 'AMAZON' || $image === 'DISNEY' ? 85 : $image === 'COUPANG' ? 150 : 100}%;
+    background-position: center;
+    background-color: ${({$image}) => $image === 'NETFLIX' || $image === 'WATCHA' ? '#000000' : '#FFFFFF' };
+
+    &::after {
+        content: ${({$image}) => $image === 'NETFLIX' ? "'넷플릭스'" :
+                                 $image === 'WATCHA' ? "'왓챠'" :
+                                 $image === 'AMAZON' ? "'아마존 프라임'" : 
+                                 $image === 'DISNEY' ? "'디즈니+'" :
+                                 $image === 'WAVVE' ? "'웨이브'" :
+                                 $image === 'TVING' ? "'티빙'" :
+                                 $image === 'COUPANG' ? "'쿠팡플레이'" : "''" };
+        position: absolute;
+        bottom: 120%;
+        left: 50%;
+        transform: translateX(-50%) translateY(5px);
+        background: rgba(43, 43, 48, 0.9);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        color: #ffffff;
+        padding: 3px 6px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: .9rem;
+        font-weight: 500;
+        white-space: nowrap;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.2s ease-in-out;
+        z-index: 100;
+    }
+
+    &:hover::after {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 768px) {
+        &::after {
+            font-size: 0.9rem;
         }
     }
 `
