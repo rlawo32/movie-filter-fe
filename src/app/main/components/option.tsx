@@ -23,19 +23,19 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 
 import { useEffect, useState } from "react";
-import useMainProcessStore from "../../stores/useMainProcessStore";
-
-import useSupabaseBrowser from "@/app/supabase/supabase-browser";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { getOptionAllQuery } from "@/app/queries/getOptionQuery";
+import useSupabaseBrowser from "@/app/supabase/supabase-browser";
 import axios from "axios";
 
-
+import useMainProcessStore from "../../stores/useMainProcessStore";
+import useMovieListStore from "../../stores/useMovieListStore";
 
 const Option = () => {
     const supabase = useSupabaseBrowser();
 
     const {process, setProcess, optionArr, setOptionArr, removeOptionArr, selectPersonnel, optionClean} = useMainProcessStore();
+    const { setMovieLogId } = useMovieListStore();
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -50,24 +50,20 @@ const Option = () => {
 
         axios({
             method: "POST",
-            // 백엔드 이름 수정으로 인한 경로 수정 - 20260214 ms
             url: "/local/api/recommend/search",
             data: optionArr,
             headers: {'Content-type': 'application/json'}
         }).then((res):void => {
             console.log("서버 응답:", res.data);
-            alert("추천 영화가 성공적으로 저장되었습니다!");
+            setMovieLogId(res.data);
+            optionClean(4);
         }).catch((err):void => {
             alert("서버를 확인해주세요.");
             console.log(err.message);
+            optionClean(0);
         }).finally(() => {
             setIsLoading(false); // 성공하든 실패하든 로딩 해제
         });
-    }
-
-    const closeModal = () => {
-        setProcess(0);
-        optionClean();
     }
 
     const selectOptionItem = (optionId:string, optionType:string, optionTitle:string) => {
@@ -116,7 +112,7 @@ const Option = () => {
     return (
         <Style.OverlayStyle $process={process}> 
             <Style.OptionStyle $process={process}>
-                <button className="modal_close" onClick={() => closeModal()}>X</button>
+                <button className="modal_close" onClick={() => optionClean(0)}>X</button>
                 <div className="option_progress">
                     <Style.ProgressItem $process={process === 1 ? true : false}>
                         <div className="item_icon">

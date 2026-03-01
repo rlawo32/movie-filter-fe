@@ -1,6 +1,7 @@
 import styled, { keyframes, css } from 'styled-components';
 
 const defaultImageUrl:string|undefined = process.env.NEXT_PUBLIC_DEFAULT_IMAGE_URL;
+const movieImageUrl:string|undefined = process.env.NEXT_PUBLIC_MOVIE_IMAGE_URL;
 
 const fadeIn = keyframes` from { opacity: 0; } to { opacity: 1; } `;
 const scaleUp = keyframes` 
@@ -71,7 +72,7 @@ export const ModalContent = styled.div<{ $isClosing: boolean; $image: string}>`
         width: 100%;
         height: 70%;
         background-color: rgb(13, 13, 18);
-        background-image: linear-gradient(75deg, rgba(13, 13, 18, 1) 10%, rgba(13, 13, 18, 0.6) 20%, rgba(13, 13, 18, 0) 40%), ${({$image}) => "url('" + $image + "')"};
+        background-image: linear-gradient(75deg, rgba(13, 13, 18, 1) 10%, rgba(13, 13, 18, 0.6) 20%, rgba(13, 13, 18, 0) 40%), ${({$image}) => "url('" + movieImageUrl + "/original" + $image + "')"};
         background-repeat: no-repeat;
         background-position: right top; 
         background-size: 95%;
@@ -117,6 +118,9 @@ export const ModalContent = styled.div<{ $isClosing: boolean; $image: string}>`
                 height: 100%;
 
                 .movie_title {
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
                     font-size: 4rem;
                     font-weight: 700;
                 }
