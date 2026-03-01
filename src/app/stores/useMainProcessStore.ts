@@ -7,7 +7,7 @@ interface mainProcessStore {
     setOptionArr: (id:string, type:string, title:string) => void;
     removeOptionArr: (id:string) => void;
     selectPersonnel: (id:string, type:string, title:string) => void;
-    optionClean: () => void;
+    optionClean: (step:number) => void;
 }
 
 const useMainProcessStore = create<mainProcessStore>((set, get) => ({
@@ -49,8 +49,8 @@ const useMainProcessStore = create<mainProcessStore>((set, get) => ({
             optionArr: [{ id, type, title }],
         }));
     },
-    optionClean: () => {
-        set({process: 0});
+    optionClean: (step: number) => {
+        set({process: step});
         set({optionArr: []});
     },
 }));
