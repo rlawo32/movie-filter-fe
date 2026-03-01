@@ -1,28 +1,28 @@
 'use client'
 
-import CloseIcon from "./closeIcon";
 import * as Style from "./modal.style";
 
 import { useEffect, useState } from "react";
 
+import CloseIcon from "./closeIcon";
+import Wishlist from "./wishlist";
+
 interface ModalProps {  
     data: {
-        id: number,
-        title: string,
-        year: string,
-        matchRate: number,
-        genres: string[],
-        summary: string,
-        poster: string,
-        backdrop: string,
-        platforms: {
-          name: string,
-          logo: string
-        }[],
-        rating: {
-          name: string,
-          score: number
-        }[]
+        is_wishlist: boolean
+        mi_genre: string
+        mi_id: string
+        mi_provider: string
+        mi_release_date: string
+        mi_summary: string
+        mi_title: string
+        mp_alt: string
+        mp_backdrop: string
+        mp_poster: string
+        ms_imdb_score: number
+        ms_meta_score: number
+        ms_tmdb_score: number
+        ms_tomato_score: number
     };
     onClose: () => void;
 }
@@ -30,7 +30,9 @@ interface ModalProps {
 const Modal = (props : ModalProps) => {
 
     const defaultImageUrl:string|undefined = process.env.NEXT_PUBLIC_DEFAULT_IMAGE_URL;
+
     const [isClose, setIsClose] = useState<boolean>(false);
+    const [scoreList, setScoreList] = useState<{name: string, score: number}[]>([]);
 
     const handleClose = () => {
         if(isClose) return;
@@ -39,6 +41,16 @@ const Modal = (props : ModalProps) => {
             props.onClose();
         }, 200)
     }
+
+    useEffect(() => {
+        const setScore = [
+            { name: 'TMDB', score: Number(props.data.ms_tmdb_score.toFixed(1)) },
+            { name: 'IMDB', score: props.data.ms_imdb_score },
+            { name: 'METACRITIC', score: props.data.ms_meta_score },
+            { name: 'TOMATO', score: props.data.ms_tomato_score }
+        ];
+        setScoreList(setScore);
+    }, []);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -58,7 +70,7 @@ const Modal = (props : ModalProps) => {
 
     return (
         <Style.ModalOverlay $isClosing={isClose} onClick={handleClose}>
-            <Style.ModalContent $isClosing={isClose} $image={props.data.backdrop} onClick={(e) => e.stopPropagation()}>
+            <Style.ModalContent $isClosing={isClose} $image={props.data.mp_backdrop} onClick={(e) => e.stopPropagation()}>
                 <button className="modal_close" onClick={() => handleClose()}><CloseIcon /></button>
                 <div className="modal_head" />
                 <div className="modal_body">
@@ -66,28 +78,28 @@ const Modal = (props : ModalProps) => {
                     <div className="modal_content_top">
                         <div className="modal_content_left">
                             <div className="movie_title">
-                                {props.data.title}
+                                {props.data.mi_title}<Wishlist is_wishlist={props.data.is_wishlist} mi_id={props.data.mi_id} type={"M"} />
                             </div>
                             <div className="movie_genres">
-                                {props.data.genres.map((genre, idx) => {
+                                {props.data.mi_genre.split(',').map((genre, idx) => {
                                     return (
                                         <div className="movie_genre" key={"genre_" + idx}>{genre}</div>
                                     )
                                 })} 
                             </div>
                             <div className="movie_summary">
-                                {props.data.summary}
+                                {props.data.mi_summary}
                             </div>
                             <div className="movie_shortcut">
-                                {props.data.platforms.map((platform, idx) => {
+                                {props.data.mi_provider.split(',').filter((p) => p !== 'NONE').map((platform, idx) => {
                                     return (
-                                        <Style.PlatformBadge $image={platform.name} key={"ott_" + idx} />
+                                        <Style.PlatformBadge $image={platform} key={"ott_" + idx} />
                                     )
                                 })} 
                             </div>
                         </div>
                         <div className="modal_content_right">
-                            {props.data.rating.map((rate, idx) => {
+                            {scoreList.filter(rate => rate.score !== 0).map((rate, idx) => {
                                 const score = rate.name === 'IMDB' || rate.name === 'TMDB' ? rate.score * 10 : rate.score;
                                 return (
                                     <Style.RatingBadge $score={score} key={"ott_" + idx}>
@@ -95,7 +107,7 @@ const Modal = (props : ModalProps) => {
                                             <img src={defaultImageUrl + "/platform/" + rate.name + ".svg"} alt="rating_platform" />
                                             <div className="score_detail">
                                                 <div className="score_view">
-                                                    {rate.name === 'IMDB' ? score / 10 : score}{rate.name === 'TOMATO' || rate.name === 'TMDB' ? '%' : ''}
+                                                    {rate.name === 'IMDB' || rate.name === 'TMDB' ? score / 10 : score}{rate.name === 'TOMATO' ? '%' : ''}
                                                 </div>
                                                 <div className="score_title">
                                                     {rate.name === 'TOMATO' ? 'Tomatometer' : rate.name === 'METACRITIC' ? 'Metascore' : rate.name}
