@@ -1,6 +1,7 @@
 import styled, { keyframes, css } from 'styled-components';
 
 const defaultImageUrl:string|undefined = process.env.NEXT_PUBLIC_DEFAULT_IMAGE_URL;
+const movieImageUrl:string|undefined = process.env.NEXT_PUBLIC_MOVIE_IMAGE_URL;
 
 const fadeInUp = keyframes`
   0% {
@@ -81,46 +82,6 @@ export const MovieCard = styled('div')<{$image:string; $idx:number}>`
             transition: transform .4s ease-in-out;
         }
 
-        .card_favorite {
-            @media (max-width: 1024px) {
-                width: 20px;
-                height: 20px;
-                font-size: 1rem;
-            }
-            @media (max-width: 768px) {
-                top: 7px;
-                right: 7px;
-            }
-            position: absolute;
-            top: 5px;
-            right: 3px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 25px;
-            height: 25px;
-            padding: 0;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            color: #FFFFFF;
-            line-height: 0;
-            background: rgba(255, 255, 255, 0.2); 
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 99;
-
-            &:hover {
-                background: rgba(255, 255, 255, 0.4);
-                /* transform: scale(1.1); */
-            }
-
-            .icon {
-                filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.5));
-            }
-        }
-
         .card_head {
             @media (max-width: 768px) {
                 width: 50%;
@@ -138,7 +99,7 @@ export const MovieCard = styled('div')<{$image:string; $idx:number}>`
                 left: 0;
                 width: 100%;
                 height: 99%;
-                background-image: ${({$image}) => "url('" + $image + "')"};
+                background-image: ${({$image}) => "url('" + movieImageUrl + "/w500" + $image + "')"};
                 background-size: 100%;
                 background-repeat: no-repeat;
             }
