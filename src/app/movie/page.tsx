@@ -2,18 +2,25 @@
 
 import * as Style from "./page.style";
 
+import { notFound } from 'next/navigation';
 import { useEffect, useState } from "react";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { getRecommendMovieListQuery } from "../queries/getMovieQuery";
 import useSupabaseBrowser from "../supabase/supabase-browser";
+import axios from "axios";
 
 import useMainProcessStore from "../stores/useMainProcessStore";
 
 import Modal from "./components/modal";
 import Wishlist from "./components/wishlist";
 import Loading from "../main/components/loading";
+import Empty from "./components/empty";
 
 const Movie = (props:{movieLogId:string}) => {
+    if (props.movieLogId === 'NONE') {
+        return <Empty />;
+    }
+
     const supabase = useSupabaseBrowser();
 
     const {setIsLoading} = useMainProcessStore();
@@ -39,6 +46,21 @@ const Movie = (props:{movieLogId:string}) => {
     } | null>();
     const [isMounted, setIsMounted] = useState(false);
 
+    const onClickMovieCard = (item:any) => {
+        axios({
+            method: "POST",
+            url: "/local/api/user/clickLog",
+            data: {uiId: localStorage.getItem('user_id'), miId: item.mi_id},
+            headers: {'Content-type': 'application/json'}
+        }).then((res):void => {
+            console.log("서버 응답:", res.data);
+        }).catch((err):void => {
+            alert("서버를 확인해주세요.");
+            console.log(err.message);
+        });
+        setModalData(item);
+    }
+
     useEffect(() => {
         setIsLoading(false); 
         setIsMounted(true);
@@ -52,14 +74,14 @@ const Movie = (props:{movieLogId:string}) => {
                 
             </div>
             {
-                !isMounted ? <Loading /> : loading ? <Loading /> :
+                !isMounted || loading ? <Loading /> : !movieList?.length ? notFound() :
                     <>
                         <div className="movie_body">
                             {modalData && (<Modal data={modalData} onClose={() => setModalData(null)} />)}
                             <div className="list_section">
-                                {isMounted && movieList?.map((item, idx1) => {
+                                {isMounted && movieList.map((item, idx1) => {
                                     return (
-                                        <Style.MovieCard $image={item.mp_poster} $idx={idx1} key={idx1} onClick={() => setModalData(item)}>
+                                        <Style.MovieCard $image={item.mp_poster} $idx={idx1} key={idx1} onClick={() => onClickMovieCard(item)}>
                                             <div className="card_container">
                                                 <Wishlist is_wishlist={item.is_wishlist} mi_id={item.mi_id} type={"L"} />
                                                 <div className="card_head">
@@ -70,7 +92,7 @@ const Movie = (props:{movieLogId:string}) => {
                                                     <div className="card_ott">
                                                         {item.mi_provider.split(',').filter((p) => p !== 'NONE').map((platform, idx2) => {
                                                             return (
-                                                                <Style.PlatformBadge $image={platform} key={platform + idx2} />
+                                                                <Style.PlatformBadge $image={platform.trim()} key={platform + idx2} />
                                                             )
                                                         })}
                                                     </div>
