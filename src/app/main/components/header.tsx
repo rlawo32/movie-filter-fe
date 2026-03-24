@@ -4,7 +4,7 @@ import styled, { keyframes } from "styled-components";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import { jwtDecode, JwtPayload } from 'jwt-decode';
-import axiosInstance from "../../lib/axiosInstance";
+import api from "@/app/axios";
 
 interface CustomJwtPayload extends JwtPayload {
     sub?: string;
@@ -42,7 +42,7 @@ const Header = () => {
 
     const fetchProfileImage = async (uid: string) => {
         try {
-            const res = await axiosInstance.get('/local/api/user/profile-image', {
+            const res = await api.get('/local/api/user/profile-image', {
                 params: { userId: uid },
             });
             const url = res.data?.profileImageUrl;
@@ -97,7 +97,7 @@ const Header = () => {
             formData.append('files', file);
             formData.append('userId', userId);
 
-            const res = await axiosInstance.post('/local/api/user/uploadImage', formData);
+            const res = await api.post('/local/api/user/uploadImage', formData);
 
             const newUrl = res.data?.profileImageUrl;
             if (newUrl && newUrl.length > 0) {
